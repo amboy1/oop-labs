@@ -1,0 +1,31 @@
+cmake_minimum_required(VERSION 3.10)
+project(lab3_3)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Подключаем все заголовочные файлы
+include_directories(${CMAKE_SOURCE_DIR}/include)
+
+# Либы
+add_library(figures
+    src/figure.cpp
+    src/rectangle.cpp
+    src/trapezoid.cpp
+    src/square.cpp
+    src/figure_array.cpp
+)
+
+target_include_directories(figures PUBLIC ${CMAKE_SOURCE_DIR}/include)
+
+# === Основной исполняемый файл ===
+add_executable(main src/main.cpp)
+target_link_libraries(main PRIVATE figures)
+
+# Тесты
+find_package(GTest REQUIRED)
+enable_testing()
+
+add_executable(test_figures tests/test_figures.cpp)
+target_link_libraries(test_figures PRIVATE figures GTest::GTest GTest::Main)
+add_test(NAME test_figures COMMAND test_figures)
